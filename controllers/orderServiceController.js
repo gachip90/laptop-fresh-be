@@ -1,7 +1,7 @@
 const OrderService = require('../models/OrderService');
 
 const createOrderService = async (req, res) => {
-  const { userId,  fullName, studentId, email, phone, serviceType, details, deviceInfo, date, time, location, note } = req.body;
+  const { userId, fullName, studentId, email, phone, serviceType, details, deviceInfo, date, time, location, note } = req.body;
 
   try {
     // Kiểm tra userId (bắt buộc vì khách hàng phải đăng nhập)
@@ -42,7 +42,7 @@ const getOrderServiceById = async (req, res) => {
   const { id } = req.params;
   try {
     const order = await OrderService.findByPk(id, {
-      include: ['user'], 
+      include: ['user'],
     });
     if (!order) return res.status(400).json({ message: 'Đơn hàng không tồn tại' });
 
@@ -67,11 +67,11 @@ const getOrderServiceByUser = async (req, res) => {
       where: { userId },
       include: ['user'],
     });
-    
+
     if (!order) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: 'Không tìm thấy đơn hàng của người dùng này' 
+        message: 'Không tìm thấy đơn hàng của người dùng này'
       });
     }
 
@@ -92,7 +92,7 @@ const getOrderServiceByUser = async (req, res) => {
 const getAllOrderService = async (req, res) => {
   try {
     const orders = await OrderService.findAll({
-      include: ['user'], 
+      include: ['user'],
     });
     res.status(200).json({
       success: true,
@@ -110,7 +110,7 @@ const getAllOrderService = async (req, res) => {
 
 const updateOrderService = async (req, res) => {
   const { id } = req.params;
-  const {  serviceType, fullName, phone, date, location, status } = req.body;
+  const { serviceType, fullName, phone, date, location, status } = req.body;
 
   try {
     const order = await OrderService.findByPk(id);
@@ -142,7 +142,7 @@ const updateOrderService = async (req, res) => {
 
 const cancelOrderService = async (req, res) => {
   const { id } = req.params;
-  const {  status } = req.body;
+  const { status } = req.body;
 
   try {
     const order = await OrderService.findByPk(id);

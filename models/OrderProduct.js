@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db");
-const User = require("./User"); 
+const User = require("./User");
 
 const OrderProduct = sequelize.define("OrderProduct", {
   id: {
@@ -8,9 +8,17 @@ const OrderProduct = sequelize.define("OrderProduct", {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
+  userId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    references: {
+      model: "Users",
+      key: "id",
+    },
+  },
   productName: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   customerName: {
     type: DataTypes.STRING,
@@ -26,16 +34,18 @@ const OrderProduct = sequelize.define("OrderProduct", {
   },
   address: {
     type: DataTypes.TEXT,
-    allowNull: false, 
+    allowNull: false,
   },
   totalPrice: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: false,
   },
 }, {
   tableName: "OrderProducts",
   timestamps: true,
 });
+
+OrderProduct.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 
 module.exports = OrderProduct;

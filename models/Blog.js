@@ -1,17 +1,17 @@
 const { Sequelize, DataTypes } = require("sequelize")
-const { sequelize } = require("../config/db") 
+const { sequelize } = require("../config/db")
 
 function createSlug(title) {
   return title
     .toLowerCase()
-    .normalize("NFD") 
-    .replace(/[\u0300-\u036f]/g, "") 
-    .replace(/đ/g, "d") 
-    .replace(/Đ/g, "D") 
-    .replace(/[^a-z0-9\s-]/g, "") 
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D")
+    .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-")
-    .replace(/-+/g, "-") 
-    .replace(/^-+|-+$/g, "") 
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "")
     .trim()
 }
 
@@ -32,13 +32,13 @@ const Blog = sequelize.define(
       unique: true,
     },
     description: {
-      type: DataTypes.TEXT, 
+      type: DataTypes.TEXT,
     },
     content: {
       type: DataTypes.TEXT,
     },
     image: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     category: {
       type: DataTypes.STRING,
@@ -49,18 +49,18 @@ const Blog = sequelize.define(
       allowNull: false,
     },
     publishedDate: {
-      type: DataTypes.STRING, 
+      type: DataTypes.STRING,
       allowNull: false,
     },
     readTime: {
-      type: DataTypes.STRING, 
+      type: DataTypes.STRING,
       defaultValue: "2 phút"
     },
   },
   {
     tableName: "Blogs",
-    timestamps: true, 
-     hooks: {
+    timestamps: true,
+    hooks: {
       // Hook to generate slug before creating a new blog
       beforeCreate: async (blog, options) => {
         if (blog.title && !blog.slug) {

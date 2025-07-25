@@ -17,7 +17,7 @@ const Feedback = sequelize.define('Feedback', {
         allowNull: false,
     },
     content: {
-        type:DataTypes.TEXT,
+        type: DataTypes.TEXT,
         allowNull: false
     },
     userId: {

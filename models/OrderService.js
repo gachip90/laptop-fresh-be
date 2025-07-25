@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db");
-const User = require("./User"); 
+const User = require("./User");
 
 const OrderService = sequelize.define("OrderService", {
   id: {
@@ -10,7 +10,7 @@ const OrderService = sequelize.define("OrderService", {
   },
   userId: {
     type: DataTypes.UUID,
-    allowNull: false, 
+    allowNull: false,
     references: {
       model: "Users",
       key: "id",
@@ -42,7 +42,7 @@ const OrderService = sequelize.define("OrderService", {
   },
   details: {
     type: DataTypes.TEXT,
-    allowNull: true, 
+    allowNull: true,
   },
   deviceInfo: {
     type: DataTypes.STRING,
@@ -62,10 +62,10 @@ const OrderService = sequelize.define("OrderService", {
   },
   note: {
     type: DataTypes.TEXT,
-    allowNull: true, 
+    allowNull: true,
   },
   status: {
-    type: DataTypes.ENUM("canceled","pending", "confirmed", "completed"),
+    type: DataTypes.ENUM("canceled", "pending", "confirmed", "completed"),
     defaultValue: "pending",
   },
   createdAt: {
@@ -81,9 +81,9 @@ const OrderService = sequelize.define("OrderService", {
         order: [['orderCode', 'DESC']],
       });
 
-      let nextNumber = 1; 
+      let nextNumber = 1;
       if (lastOrder && lastOrder.orderCode) {
-        
+
         const lastNumber = parseInt(lastOrder.orderCode.replace("MA", ""), 10);
         if (!isNaN(lastNumber)) {
           nextNumber = lastNumber + 1;

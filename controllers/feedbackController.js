@@ -2,13 +2,13 @@ const Feedback = require('../models/Feedback');
 const User = require('../models/User');
 
 const createFeedback = async (req, res) => {
-  const { feedbackType, title, content, userId } = req.body;
+  const { userId, feedbackType, title, content } = req.body;
 
   try {
     if (!userId) {
       return res.status(400).json({
         success: false,
-        message: 'userId là bắt buộc',
+        message: 'User id là bắt buộc',
       });
     }
 
@@ -99,7 +99,7 @@ const updateFeedback = async (req, res) => {
     await feedback.update({
       feedbackType: feedbackType ?? feedback.feedbackType,
       title: title ?? feedback.title,
-      content: content ?? feedback.content 
+      content: content ?? feedback.content
     });
 
     res.status(200).json({

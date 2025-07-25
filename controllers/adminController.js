@@ -3,10 +3,9 @@ const Service = require('../models/Service');
 const OrderService = require('../models/OrderService');
 const OrderProduct = require('../models/OrderProduct');
 
-// Thêm function này vào file
 const getStats = async (req, res) => {
   try {
-    const totalUsers = await User.count();
+    const totalUsers = await User.count({ where: { role: 'user' } });
 
     const activeServices = await Service.count();
 
@@ -35,7 +34,7 @@ const getStats = async (req, res) => {
   }
 };
 
-// Cập nhật module.exports
-module.exports = { 
-  getStats  
+
+module.exports = {
+  getStats
 };

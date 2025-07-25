@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
 const register = async (req, res) => {
-  const {  email, password, confirmPassword, fullName, phone, studentId } = req.body;
+  const { email, password, confirmPassword, fullName, phone, studentId } = req.body;
 
   // Kiểm tra confirmPassword
   if (password !== confirmPassword) {
@@ -20,39 +20,40 @@ const register = async (req, res) => {
     user = await User.create({
       email,
       password: await bcrypt.hash(password, 10),
-      fullName, 
+      fullName,
       phone,
       studentId,
     });
 
-    res.status(200).json({ 
+    res.status(200).json({
       success: true,
       message: "Tạo tài khoản mới thành công!"
-     });
+    });
   } catch (error) {
     console.error("Tạo tài khoản mới thất bại!")
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      message: 'Lỗi server', 
-      error: error.message });
+      message: 'Lỗi server',
+      error: error.message
+    });
   }
 };
 
-module.exports = { register };
 
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ where: { email } });
-    if (!user) return res.status(400).json({ 
+    if (!user) return res.status(400).json({
       success: false,
-      message: 'Sai tên đăng nhập hoặc mật khẩu' });
+      message: 'Sai tên đăng nhập hoặc mật khẩu'
+    });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: 'Sai tên đăng nhập hoặc mật khẩu' });
 
     const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ 
+    res.json({
       success: true,
       userInfo: {
         fullName: user.fullName,
@@ -62,7 +63,8 @@ const login = async (req, res) => {
         phone: user.phone
       },
       message: "Đăng nhập thành công",
-      token });
+      token
+    });
   } catch (error) {
     res.status(500).json({ message: 'Lỗi server', error: error.message });
   }

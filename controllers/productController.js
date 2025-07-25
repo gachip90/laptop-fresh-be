@@ -1,20 +1,25 @@
 const Product = require("../models/Product");
 
 const createProduct = async (req, res) => {
-  const { productName, brand, price, originalPrice, discount, image, category, isNew, isBestSeller } = req.body;
+  let { productName, originalPrice, discount, image, category, isNew, isBestSeller } = req.body;
+  let price;
 
   try {
-    // Kiểm tra trùng lặp (ví dụ: productName duy nhất)
     const existingProduct = await Product.findOne({ where: { productName } });
     if (existingProduct) return res.status(400).json({ message: "Sản phẩm đã tồn tại" });
 
-    // Tạo sản phẩm mới
+    const oriPrice = parseInt(originalPrice, 10);
+    let disc = parseInt(discount, 10);
+    if (isNaN(disc)) disc = 0;
+    if (isNaN(oriPrice)) return res.status(400).json({ message: "originalPrice không hợp lệ" });
+    price = Math.round(oriPrice * (100 - disc) / 100);
+
+
     const product = await Product.create({
       productName,
-      brand,
       price,
-      originalPrice,
-      discount,
+      originalPrice: oriPrice,
+      discount: disc,
       image,
       category,
       isNew,
@@ -75,18 +80,23 @@ const getAllProducts = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const { id } = req.params;
-  const { productName, brand, price, originalPrice, discount, image, category, isNew, isBestSeller } = req.body;
+  const { productName, originalPrice, discount, image, category, isNew, isBestSeller } = req.body;
 
   try {
     const product = await Product.findByPk(id);
     if (!product) return res.status(400).json({ message: "Sản phẩm không tồn tại" });
 
+    // Lấy giá trị mới hoặc giữ nguyên
+    const oriPrice = originalPrice !== undefined ? parseInt(originalPrice, 10) : product.originalPrice;
+    let disc = discount !== undefined ? parseInt(discount, 10) : product.discount;
+    if (isNaN(disc)) disc = 0;
+    if (isNaN(oriPrice)) return res.status(400).json({ message: "originalPrice không hợp lệ" });
+    const newPrice = Math.round(oriPrice * (100 - disc) / 100);
+
     await product.update({
       productName: productName ?? product.productName,
-      brand: brand ?? product.brand,
-      price: price ?? product.price,
-      originalPrice: originalPrice ?? product.originalPrice,
-      discount: discount ?? product.discount,
+      originalPrice: oriPrice,
+      discount: disc,
       image: image ?? product.image,
       category: category ?? product.category,
       isNew: isNew ?? product.isNew,

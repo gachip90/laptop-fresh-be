@@ -5,32 +5,28 @@ const Product = sequelize.define(
   "Product",
   {
     id: {
-      type: DataTypes.UUID, 
-      defaultValue: DataTypes.UUIDV4, 
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
     productName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    brand: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     price: {
-      type: DataTypes.INTEGER, 
-      allowNull: false,
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
     originalPrice: {
-      type: DataTypes.INTEGER, 
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
     discount: {
-      type: DataTypes.DECIMAL(5, 2), 
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
     image: {
-      type: DataTypes.STRING, 
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     category: {
@@ -39,12 +35,12 @@ const Product = sequelize.define(
     },
     isNew: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false, 
+      defaultValue: false,
       allowNull: true,
     },
     isBestSeller: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false, 
+      defaultValue: false,
       allowNull: true,
     },
     createdAt: {
@@ -57,8 +53,8 @@ const Product = sequelize.define(
     },
   },
   {
-    tableName: "Products", 
-    timestamps: true, 
+    tableName: "Products",
+    timestamps: true,
   }
 );
 
