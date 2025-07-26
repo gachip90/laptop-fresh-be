@@ -4,7 +4,7 @@ const getUserById = async (req, res) => {
     const { id } = req.params;
     try {
         const user = await User.findByPk(id);
-        if (!user) return res.status(400).json({message: "Người dùng không tồn tại"});
+        if (!user) return res.status(400).json({ message: "Người dùng không tồn tại" });
 
         res.status(200).json({
             success: true,
@@ -33,34 +33,34 @@ const getAllUsers = async (req, res) => {
             success: false,
             message: "Lỗi server",
             error: error.message,
-        }); 
+        });
     }
 };
 
 const updateUser = async (req, res) => {
     const { id } = req.params;
     const { fullName, studentId, email, phone, className, major } = req.body
-    
+
     try {
         const user = await User.findByPk(id);
         if (!user) return res.status(400).json({
             message: "Người dùng không tồn tại"
         });
 
-    await user.update({
-        fullName: fullName ?? user.fullName,
-        studentId: studentId ?? user.studentId,
-        email: email ?? user.email,
-        phone: phone ?? user.phone,
-        className: className ?? user.className,
-        major: major ?? user.major,
-    })    
+        await user.update({
+            fullName: fullName ?? user.fullName,
+            studentId: studentId ?? user.studentId,
+            email: email ?? user.email,
+            phone: phone ?? user.phone,
+            className: className ?? user.className,
+            major: major ?? user.major,
+        })
 
-    res.status(200).json({
-        success: true, 
-        message: "Cập nhật thông tin người dùng thành công!",
-        user,
-    });
+        res.status(200).json({
+            success: true,
+            message: "Cập nhật thông tin người dùng thành công!",
+            user,
+        });
     } catch (error) {
         console.error("Cập nhật thông tin người dùng thất bại!");
         res.status(500).json({

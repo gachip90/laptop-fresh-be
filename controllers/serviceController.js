@@ -1,14 +1,13 @@
 const Service = require('../models/Service');
 
 const createService = async (req, res) => {
-  const { serviceName, description, price, time, location,  } = req.body;
+  const { serviceName, description, price, time, location, } = req.body;
 
   try {
-    // Kiểm tra trùng lặp (ví dụ: serviceName duy nhất)
+
     const existingService = await Service.findOne({ where: { serviceName } });
     if (existingService) return res.status(400).json({ message: 'Dịch vụ đã tồn tại' });
 
-    // Tạo dịch vụ mới
     const service = await Service.create({
       serviceName,
       description,
@@ -71,7 +70,7 @@ const getAllServices = async (req, res) => {
 
 const updateService = async (req, res) => {
   const { id } = req.params;
-  const { serviceName, description, price, time, location} = req.body;
+  const { serviceName, description, price, time, location } = req.body;
 
   try {
     const service = await Service.findByPk(id);

@@ -8,7 +8,7 @@ const createOrderService = async (req, res) => {
     if (!userId) return res.status(400).json({ message: 'userId là bắt buộc' });
 
     // Tạo đơn hàng mới
-    const order = await OrderService.create({
+    const orderService = await OrderService.create({
       userId,
       fullName,
       studentId,
@@ -26,7 +26,7 @@ const createOrderService = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Tạo đơn hàng thành công!",
-      order,
+      orderService,
     });
   } catch (error) {
     console.error("Tạo đơn hàng thất bại!");
@@ -41,15 +41,15 @@ const createOrderService = async (req, res) => {
 const getOrderServiceById = async (req, res) => {
   const { id } = req.params;
   try {
-    const order = await OrderService.findByPk(id, {
+    const orderService = await OrderService.findByPk(id, {
       include: ['user'],
     });
-    if (!order) return res.status(400).json({ message: 'Đơn hàng không tồn tại' });
+    if (!orderService) return res.status(400).json({ message: 'Đơn hàng không tồn tại' });
 
     res.status(200).json({
       success: true,
       message: "Lấy thông tin đơn hàng thành công!",
-      order,
+      orderService,
     });
   } catch (error) {
     res.status(500).json({
@@ -63,12 +63,12 @@ const getOrderServiceById = async (req, res) => {
 const getOrderServiceByUser = async (req, res) => {
   const { userId } = req.params;
   try {
-    const order = await OrderService.findAll({
+    const orderService = await OrderService.findAll({
       where: { userId },
       include: ['user'],
     });
 
-    if (!order) {
+    if (!orderService) {
       return res.status(404).json({
         success: false,
         message: 'Không tìm thấy đơn hàng của người dùng này'
@@ -78,7 +78,7 @@ const getOrderServiceByUser = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Lấy thông tin đơn hàng thành công!",
-      order,
+      orderService,
     });
   } catch (error) {
     res.status(500).json({
@@ -91,13 +91,13 @@ const getOrderServiceByUser = async (req, res) => {
 
 const getAllOrderService = async (req, res) => {
   try {
-    const orders = await OrderService.findAll({
+    const orderService = await OrderService.findAll({
       include: ['user'],
     });
     res.status(200).json({
       success: true,
       message: "Lấy danh sách đơn hàng thành công!",
-      orders,
+      orderService,
     });
   } catch (error) {
     res.status(500).json({
@@ -113,10 +113,9 @@ const updateOrderService = async (req, res) => {
   const { serviceType, fullName, phone, date, location, status } = req.body;
 
   try {
-    const order = await OrderService.findByPk(id);
-    if (!order) return res.status(400).json({ message: 'Đơn hàng không tồn tại' });
-
-    await order.update({
+    const orderService = await OrderService.findByPk(id);
+    if (!orderService) return res.status(400).json({ message: 'Đơn hàng không tồn tại' });
+    await orderService.update({
       serviceType: serviceType ?? order.serviceType,
       fullName: fullName ?? order.fullName,
       phone: phone ?? order.phone,
@@ -128,7 +127,7 @@ const updateOrderService = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Cập nhật đơn hàng thành công!",
-      order,
+      orderService,
     });
   } catch (error) {
     console.error("Cập nhật đơn hàng thất bại!");
@@ -145,17 +144,17 @@ const cancelOrderService = async (req, res) => {
   const { status } = req.body;
 
   try {
-    const order = await OrderService.findByPk(id);
-    if (!order) return res.status(400).json({ message: 'Đơn hàng không tồn tại' });
+    const orderService = await OrderService.findByPk(id);
+    if (!orderService) return res.status(400).json({ message: 'Đơn hàng không tồn tại' });
 
-    await order.update({
+    await orderService.update({
       status: "canceled",
     });
 
     res.status(200).json({
       success: true,
       message: "Hủy đơn đặt lịch thành công!",
-      order,
+      orderService,
     });
   } catch (error) {
     console.error("Hủy đơn đặt lịch thất bại!");
@@ -170,10 +169,10 @@ const cancelOrderService = async (req, res) => {
 const deleteOrderService = async (req, res) => {
   const { id } = req.params;
   try {
-    const order = await OrderService.findByPk(id);
-    if (!order) return res.status(400).json({ message: 'Đơn hàng không tồn tại' });
+    const orderService = await OrderService.findByPk(id);
+    if (!orderService) return res.status(400).json({ message: 'Đơn hàng không tồn tại' });
 
-    await order.destroy();
+    await orderService.destroy();
 
     res.status(200).json({
       success: true,

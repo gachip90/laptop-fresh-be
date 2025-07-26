@@ -32,6 +32,10 @@ const OrderProduct = sequelize.define("OrderProduct", {
     type: DataTypes.STRING,
     allowNull: false
   },
+  status: {
+    type: DataTypes.ENUM("pending", "confirmed", "completed"),
+    defaultValue: "pending",
+  },
   address: {
     type: DataTypes.TEXT,
     allowNull: false,
